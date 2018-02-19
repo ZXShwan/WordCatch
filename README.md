@@ -23,7 +23,7 @@ In this example:
 
 **Column key**: `2:from` the word candidate with column family name `2`
 
-**Cell **:
+**Cell:**
 
 ```Json
 { 
