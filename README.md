@@ -8,13 +8,54 @@ WordCatch is built by/on:
 * Hbase
 * NLTK(Natural Language Toolkit)
 * Django
-* Catatumbo
-* Google Datastore
-* Google Kubernetes Engine
+
+### Schema Design
+
+When we want to get all word candidates which fill in the phrase "different _ them", we could  query Hbase like this  `get 'wordcatch_umbc','07:different,them',[2]` in hbase shell.
+
+In this example:
+
+**Table Name**: `wordcatch_umbc`
+
+**Partition key**: `07:different,them`  Prefix 07 means the key is salted to regions.
+
+**Column Family**: `2 `  It means we want to find all word candidates filled in the middle blank.
+
+**Column key**: `2:from` the word candidate with column family name `2`
+
+**Cell **:
+
+```Json
+{ 
+   "count":278,
+   "pos":"IN",
+   "example":[ 
+      "We still have too many Americans who give into their fears of those who are different from them",
+      " For centuries, the Japanese have considered Burakumin people as descendants of Korean prisoners of war, even though there is no evidence that they are racially different from them"
+   ]
+}
+```
+
+In this json file:
+
+`count` the word candidate occurance in the umbc copus
+
+`pos` the part of speech of this word candidate (See [Penn TreeBank Project](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html))
+
+`example` example sentences to further clarify the usage
+
+[**More Example Query Result**](http://htmlpreview.github.io/?https://github.com/hialvin/WordCatch/blob/master/WordCatch-core/src/main/python/QuerySample.html)
 
 ### Check it out
-### How WordCatch works
+
+[**main program by Spark**](https://github.com/hialvin/WordCatch/blob/master/WordCatch-core/src/main/python/main.py)
+
+**[Cell Converter](https://github.com/hialvin/WordCatch/blob/master/ScalaUtils/src/main/scala/ngram/NgramValueUtil.scala)** :  help generate `Cell` for the bulk load by HFile.
+
 ### Issues
+
+Should upgrade the Django App to get compatible with the new schema.
+
 ### Future Update
 
 
